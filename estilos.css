@@ -1,0 +1,207 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Montserrat', sans-serif;
+    background:linear-gradient(135deg,#1e3c72,#2a5298,#6dd5ed);
+    background-attachment:fixed;
+    color:#333;
+}
+
+/* HERO */
+.hero{
+    height:70vh;
+    background:url('https://upload.wikimedia.org/wikipedia/commons/7/74/Ruben_Dario.jpg') center/cover no-repeat;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    text-align:center;
+}
+
+.hero::after{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.65);
+}
+
+.hero-content{
+    position:relative;
+    color:white;
+    z-index:1;
+}
+
+.hero h1{
+    font-size:3.5rem;
+    font-family:'Playfair Display', serif;
+}
+
+.hero p{
+    font-size:1.3rem;
+}
+
+/* INTRODUCCIÓN */
+.intro{
+    display:flex;
+    justify-content:center;
+    padding:120px 20px 60px 20px;
+}
+
+.card{
+    background:white;
+    width:90%;
+    max-width:1000px;
+    padding:40px;
+    border-radius:20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:30px;
+    align-items:center;
+    box-shadow:0 25px 60px rgba(0,0,0,0.35);
+}
+
+.card img{
+    width:220px;
+    border-radius:15px;
+}
+
+/* TIMELINE */
+.timeline-section{
+    padding:80px 20px;
+    text-align:center;
+    color:white;
+}
+
+.timeline-section h2{
+    margin-bottom:50px;
+    font-size:2.2rem;
+}
+
+.timeline{
+    position:relative;
+    max-width:1100px;
+    margin:auto;
+}
+
+.timeline::before{
+    content:''; 
+    position:absolute;
+    left:50%;
+    width:6px;
+    height:100%;
+    background:linear-gradient(to bottom,#fff,#ffd700,#fff);
+    transform:translateX(-50%);
+}
+
+.timeline-item{
+    position:relative;
+    width:50%;
+    padding:30px 50px;
+}
+
+.timeline-item:nth-child(odd){
+    left:0;
+    text-align:right;
+}
+
+.timeline-item:nth-child(even){
+    left:50%;
+}
+
+.timeline-item .content{
+    background:linear-gradient(135deg,#ffffff,#f3f3f3);
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.35);
+    transition:all 0.4s ease;
+    max-height:120px; 
+    overflow:hidden;
+    cursor:pointer;
+    color:#222;
+}
+
+.timeline-item .content:hover,
+.timeline-item .content:active{
+    transform:translateY(-15px) scale(1.05);
+    background:linear-gradient(135deg,#fff,#e8f0ff);
+    max-height:1000px; 
+}
+
+.timeline-item::after{
+    content:''; 
+    position:absolute;
+    top:35px;
+    width:25px;
+    height:25px;
+    background:#ffd700;
+    border-radius:50%;
+    border:4px solid white;
+}
+
+.timeline-item:nth-child(odd)::after{
+    right:-13px;
+}
+
+.timeline-item:nth-child(even)::after{
+    left:-13px;
+}
+
+/* BOTONES */
+.btn-descarga, .btn-foro {
+    display:inline-block;
+    padding:12px 25px;
+    background-color:#ffd700;
+    color:#111;
+    font-weight:bold;
+    text-decoration:none;
+    border-radius:10px;
+    transition:all 0.3s ease;
+    margin-top:20px;
+}
+
+.btn-descarga:hover, .btn-foro:hover {
+    background-color:#e6c200;
+    transform:scale(1.05);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .card{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .timeline::before{
+        left:8px;
+    }
+
+    .timeline-item{
+        width:100%;
+        padding-left:40px;
+        padding-right:20px;
+        margin-bottom:40px;
+    }
+
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even){
+        left:0;
+        text-align:left;
+    }
+
+    .timeline-item::after{
+        left:-3px;
+    }
+}
+
+/* FOOTER */
+footer{
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:25px;
+}

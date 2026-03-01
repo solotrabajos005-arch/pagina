@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foro de Rubén Darío</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ===== ESTILOS IGUALES ===== */
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg,#6dd5ed,#1e3c72);
+  margin: 0;
+  color: #111;
+}
+
+header.foro-hero {
+  height: 25vh;
+  background: linear-gradient(135deg,#1e3c72,#2a5298);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+}
+
+.foro-header-content h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  margin-bottom: 5px;
+}
+
+.foro-header-content p {
+  font-size: 1.2rem;
+}
+
+.foro-section {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+#userPanel {
+  display: none;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#logoutBtn {
+  margin-left: 15px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #ff4d4d;
+  color: white;
+  cursor: pointer;
+}
+
+.auth-buttons {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.auth-buttons button {
+  padding: 12px 25px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+  background-color: #ffd700;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.form-container {
+  display: none;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.form-container form {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  width: 350px;
+}
+
+.form-container input,
+.form-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #1e3c72;
+}
+
+.publicacion {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+#toastContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+.toast {
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+
+footer {
+  text-align: center;
+  background: #111;
+  color: white;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<header class="foro-hero">
+  <div class="foro-header-content">
+    <h1>Foro de Discusión</h1>
+    <p>Comparte tus ideas sobre Rubén Darío</p>
+  </div>
+</header>
+
+<section class="foro-section">
+
+  <div id="userPanel">
+    <span id="userInfo"></span>
+    <button id="logoutBtn">Cerrar sesión</button>
+  </div>
+
+  <div class="auth-buttons">
+    <button id="showRegister">Registrarse</button>
+    <button id="showLogin">Iniciar Sesión</button>
+  </div>
+
+  <div class="form-container" id="registerContainer">
+    <form id="registerForm">
+      <h3>Registro</h3>
+      <input type="text" id="regUsuario" placeholder="Nombre de usuario" required>
+      <input type="password" id="regPassword" placeholder="Contraseña" required>
+      <button type="submit">Registrar</button>
+    </form>
+  </div>
+
+  <div class="form-container" id="loginContainer">
+    <form id="loginForm">
+      <h3>Login</h3>
+      <input type="text" id="loginUsuario" placeholder="Nombre de usuario" required>
+      <input type="password" id="loginPassword" placeholder="Contraseña" required>
+      <button type="submit">Ingresar</button>
+    </form>
+  </div>
+
+  <div id="newPostSection" style="display:none;">
+    <form id="postForm">
+      <h3>Crear nueva publicación</h3>
+      <input type="text" id="postTitulo" placeholder="Título" required>
+      <textarea id="postContenido" placeholder="Contenido" required></textarea>
+      <button type="submit">Publicar</button>
+    </form>
+  </div>
+
+  <div id="publicacionesContainer"></div>
+
+</section>
+
+<div id="toastContainer"></div>
+
+<footer>
+  <p>Proyecto académico</p>
+</footer>
+
+<script>
+
+let currentUser = null;
+
+/* ===== TOAST ===== */
+function showToast(message, type = "success") {
+  const toast = document.createElement("div");
+  toast.className = "toast " + type;
+  toast.textContent = message;
+  document.getElementById("toastContainer").appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+/* ===== MOSTRAR FORMULARIOS ===== */
+showRegister.onclick = () => {
+  registerContainer.style.display = "flex";
+  loginContainer.style.display = "none";
+};
+
+showLogin.onclick = () => {
+  loginContainer.style.display = "flex";
+  registerContainer.style.display = "none";
+};
+
+/* ===== REGISTRO CON REDIRECCIÓN ===== */
+registerForm.onsubmit = async e => {
+  e.preventDefault();
+
+  const res = await fetch('/register', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      usuario: regUsuario.value,
+      password: regPassword.value
+    })
+  });
+
+  const data = await res.json();
+
+  if(data.error){
+    showToast(data.error,"error");
+  } else {
+    // Guardar usuario
+    localStorage.setItem("usuario", regUsuario.value);
+
+    // Redirigir automáticamente
+    window.location.href = "foro_in.html";
+  }
+};
+
+/* ===== LOGIN ===== */
+loginForm.onsubmit = async e => {
+  e.preventDefault();
+
+  const res = await fetch('/login',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      usuario: loginUsuario.value,
+      password: loginPassword.value
+    })
+  });
+
+  const data = await res.json();
+
+  if(data.usuario){
+    localStorage.setItem("usuario", data.usuario);
+    window.location.href = "foro_in.html";
+  } else {
+    showToast(data.error,"error");
+  }
+};
+
+loadPublicaciones();
+
+</script>
+
+</body>
+</html>

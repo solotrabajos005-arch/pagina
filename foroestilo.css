@@ -1,0 +1,145 @@
+/* ===================== */
+/* BASE DEL FORO */
+/* ===================== */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #6dd5ed, #1e3c72);
+    color: #111;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===================== */
+/* HEADER FORO */
+/* ===================== */
+.foro-hero {
+    height: 35vh;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.foro-header-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.foro-header-content p {
+    font-size: 1.2rem;
+}
+
+/* ===================== */
+/* SECCIÓN FORO */
+/* ===================== */
+.foro-section {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.foro-intro {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.foro-intro p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+/* ===================== */
+/* BOTONES */
+/* ===================== */
+.btn-foro {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #ffd700;
+    color: #111;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-foro:hover {
+    background-color: #e6c200;
+    transform: scale(1.05);
+}
+
+/* ===================== */
+/* COMENTARIOS */
+/* ===================== */
+.comentarios {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.comentario-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.comentario-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+}
+
+.comentario-card h3 {
+    margin-bottom: 10px;
+    color: #1e3c72;
+}
+
+.comentario-card p {
+    color: #333;
+}
+
+/* ===================== */
+/* NUEVO COMENTARIO */
+.nuevo-comentario h3 {
+    margin-bottom: 15px;
+}
+
+.nuevo-comentario textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #1e3c72;
+    resize: vertical;
+    font-family: inherit;
+    margin-bottom: 15px;
+}
+
+.nuevo-comentario button {
+    padding: 12px 25px;
+    background-color: #ffd700;
+    color: #111;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nuevo-comentario button:hover {
+    background-color: #e6c200;
+    transform: scale(1.05);
+}
+
+/* ===================== */
+/* FOOTER */
+footer {
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}

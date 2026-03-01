@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Foro</title>
+<style>
+body{
+  font-family: Arial;
+  background: linear-gradient(135deg,#ff9ff3,#54a0ff);
+  margin:0;
+}
+header{
+  background:#fff;
+  padding:20px;
+  text-align:center;
+  font-size:24px;
+  font-weight:bold;
+}
+.card{
+  background:white;
+  margin:15px;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+button{
+  background:#ff6b81;
+  color:white;
+  border:none;
+  padding:6px 12px;
+  border-radius:10px;
+  cursor:pointer;
+}
+.comment{
+  margin-left:20px;
+  margin-top:10px;
+  border-left:2px solid #ddd;
+  padding-left:10px;
+}
+</style>
+</head>
+<body>
+
+<header id="welcome"></header>
+
+<div class="card">
+<select id="categoria">
+<option value="general">General</option>
+<option value="discusiones">Discusiones</option>
+<option value="preguntas">Preguntas</option>
+</select>
+<input id="titulo" placeholder="Título">
+<textarea id="contenido" placeholder="Escribe algo..."></textarea>
+<button onclick="crearTema()">Publicar</button>
+</div>
+
+<div id="feed"></div>
+
+<script>
+
+let usuario = localStorage.getItem("usuario");
+if(!usuario){
+  usuario = prompt("Tu nombre?");
+  localStorage.setItem("usuario",usuario);
+}
+welcome.innerText = "Bienvenido, "+usuario+"";
+
+async function cargar(){
+  const res = await fetch('/publicaciones');
+  const data = await res.json();
+  feed.innerHTML="";
+  Object.keys(data).forEach(cat=>{
+    data[cat].forEach(post=>{
+      renderPost(post,cat);
+    });
+  });
+}
+
+function renderPost(post,categoria){
+  const div=document.createElement("div");
+  div.className="card";
+  div.innerHTML=`
+  <h3>${post.titulo}</h3>
+  <p>${post.contenido}</p>
+  <small>Por ${post.usuario}</small>
+  <br>
+  ${post.usuario===usuario?`<button onclick="eliminarPost('${post.id}','${categoria}')">Eliminar</button>`:''}
+  <br><br>
+  <input placeholder="Comentar..." id="c-${post.id}">
+  <button onclick="comentar('${post.id}','${categoria}',null)">Enviar</button>
+  <div id="com-${post.id}"></div>
+  `;
+  feed.appendChild(div);
+  renderComentarios(post.comentarios,post.id,categoria,div.querySelector(`#com-${post.id}`));
+}
+
+function renderComentarios(lista,postId,categoria,container){
+  lista.forEach(c=>{
+    const d=document.createElement("div");
+    d.className="comment";
+    d.innerHTML=`
+    <b>${c.usuario}</b>: ${c.contenido}
+    ${c.usuario===usuario?`<button onclick="eliminarComentario('${postId}','${categoria}','${c.id}')">X</button>`:''}
+    <br>
+    <input id="r-${c.id}" placeholder="Responder">
+    <button onclick="comentar('${postId}','${categoria}','${c.id}')">↩</button>
+    `;
+    container.appendChild(d);
+    renderComentarios(c.respuestas,postId,categoria,d);
+  });
+}
+
+async function crearTema(){
+  await fetch('/publicaciones',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      usuario,
+      titulo:titulo.value,
+      contenido:contenido.value,
+      categoria:categoria.value
+    })
+  });
+  cargar();
+}
+
+async function comentar(postId,categoria,parentId){
+  const input = parentId ? document.getElementById("r-"+parentId) : document.getElementById("c-"+postId);
+  await fetch('/comentario',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      postId,
+      categoria,
+      usuario,
+      contenido:input.value,
+      parentId
+    })
+  });
+  cargar();
+}
+
+async function eliminarPost(postId,categoria){
+  await fetch('/post',{
+    method:'DELETE',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({postId,categoria,usuario})
+  });
+  cargar();
+}
+
+async function eliminarComentario(postId,categoria,comentarioId){
+  await fetch('/comentario',{
+    method:'DELETE',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({postId,categoria,comentarioId,usuario})
+  });
+  cargar();
+}
+
+cargar();
+
+</script>
+</body>
+</html>
