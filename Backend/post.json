@@ -1,0 +1,40 @@
+{
+  "general": [
+    {
+      "id": "1772325355635unbsufv",
+      "usuario": "hdhd",
+      "titulo": "Nose que onda",
+      "contenido": "¿Cómo se palmo mi tio?",
+      "fecha": "2026-03-01T00:35:55.635Z",
+      "comentarios": []
+    }
+  ],
+  "discusiones": [
+    {
+      "id": "1772322736049fffexxk",
+      "usuario": "zz",
+      "titulo": "aa",
+      "contenido": "aa",
+      "fecha": "2026-02-28T23:52:16.050Z",
+      "comentarios": []
+    }
+  ],
+  "preguntas": [
+    {
+      "id": "1772325317505nim74x8",
+      "usuario": "hdhd",
+      "titulo": "Nose que onda",
+      "contenido": "¿Cómo se palmo mi tio?",
+      "fecha": "2026-03-01T00:35:17.505Z",
+      "comentarios": [
+        {
+          "id": "17723253333833gxairn",
+          "usuario": "hdhd",
+          "contenido": "wow al saber ",
+          "fecha": "2026-03-01T00:35:33.383Z",
+          "respuestas": []
+        }
+      ]
+    }
+  ]
+}
